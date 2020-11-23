@@ -5,9 +5,6 @@ OLD_IFS=$IFS
 IFS=$(echo -en "\n\b")
 #-------------------------------------------------------------------
 #<程序基本運行函數>
-DRAWLINE(){
-	echo -e "${yellow}================================================================================${plain}"
-}
 INI_MKDIR(){
 	if [[ ! -d $1 ]]
 	then
@@ -24,7 +21,6 @@ SET_BASIC_ENV_VAR(){
 	export TEMP_UNZIP_PATH=${SHELL_BOX_PATH}/temp/unzip/
 	export INPUT_DIR=${TEMP_UNZIP_PATH}
 	export RCLONE="${SHELL_BOX_PATH}/conf/rclone.conf"
-	INI_MKDIR ${CONFIG_FILE%\/*}
 	INI_MKDIR ${SHELL_BIN%\/*}
 	INI_MKDIR ${TEMP_UNZIP_PATH}
 	chmod -R a+rwx ${SHELL_BOX_PATH}

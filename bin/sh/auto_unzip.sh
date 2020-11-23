@@ -30,9 +30,6 @@ SET_TEMP_FILE_LIST(){
 	rm -rf ${TEMP_FILE_LIST} > /dev/null 2>&1
 	touch ${TEMP_FILE_LIST} > /dev/null 2>&1
 }
-DEL_BLANK_FOLDER(){
-	find ${TEMP_PATH} -type d -empty -delete
-}
 #-------------------------------------------------------------------
 INPUT_DIR=${TEMP_UNZIP_PATH}
 NUM_RUN=0
@@ -40,7 +37,6 @@ FILE_NUM=0
 TEMP_FILE_LIST=${TEMP_PATH}/list.txt
 DUMMY="."
 TRY_PASS=""
-DEL_BLANK_FOLDER
 #-------------------------------------------------------------------
 while true
 do
@@ -78,7 +74,7 @@ do
 			{
 				for TRY_PASS in ${PASSWD[@]}
 				do
-					7z x -y -r -bsp1 -bso0 -bse0 -aot -p${TRY_PASS} -o${TEMP_UNZIP_PATH}${i##*\/} ${i}
+					7z x -y -r -bsp1 -bso0 -bse0 -aot -p${TRY_PASS} -o${TEMP_UNZIP_PATH}$(echo -ne ${i##*\/} | grep -oE "[^\.]+"|head -1) ${i}
 					[[ $? != 2 ]] && break
 				done
 				echo >&4
@@ -88,7 +84,7 @@ do
 	#Remove All Succ File
 		for i in $(cat ${TEMP_FILE_LIST})
 		do
-			rm -f ${i}
+			rm -rf ${i}
 		done
 		unset FILE_LIST
 	else
