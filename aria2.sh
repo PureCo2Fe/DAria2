@@ -1,9 +1,9 @@
 sh_ver="2.7.3"
 export PATH=~/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/sbin:/bin
-aria2_conf_dir="/home/jovyan/work/.aria2c"
+aria2_conf_dir="/root/.aria2c"
 download_path="/datasets/DAria2/temp/unzip"
 aria2_conf="${aria2_conf_dir}/aria2.conf"
-aria2_log="${aria2_conf_dir}/aria2.log"
+aria2_log="${aria2_conf_dir}/aria2.log" && touch ${aria2_log}
 aria2c="/usr/local/bin/aria2c"
 Crontab_file="/usr/bin/crontab"
 Green_font_prefix="\033[32m"
@@ -175,12 +175,8 @@ crontab_update_start() {
     echo -e "\n0 7 * * * /bin/bash <(wget -qO- git.io/tracker.sh) ${aria2_conf} RPC 2>&1 | tee ${aria2_conf_dir}/tracker.log" >>"/tmp/crontab.bak"
     crontab "/tmp/crontab.bak"
     rm -f "/tmp/crontab.bak"
-    if [[ -z $(crontab_update_status) ]]; then
-        echo && echo -e "${Error} 自动更新 BT-Tracker 开启失败 !" && exit 1
-    else
-        Update_bt_tracker
-        echo && echo -e "${Info} 自动更新 BT-Tracker 开启成功 !"
-    fi
+    Update_bt_tracker
+    echo && echo -e "${Info} 自动更新 BT-Tracker 开启成功 !"
 }
 Update_bt_tracker() {
     check_pid
