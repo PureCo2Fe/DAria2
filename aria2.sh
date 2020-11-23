@@ -1,7 +1,7 @@
 sh_ver="2.7.3"
 export PATH=~/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/sbin:/bin
 aria2_conf_dir="/root/.aria2c"
-download_path="/datasets/DAria2/temp/unzip"
+download_path="/datasets/temp/unzip"
 aria2_conf="${aria2_conf_dir}/aria2.conf"
 aria2_log="${aria2_conf_dir}/aria2.log" && touch ${aria2_log}
 aria2c="/usr/local/bin/aria2c"

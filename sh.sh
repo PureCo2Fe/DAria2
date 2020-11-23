@@ -20,9 +20,10 @@ SET_BASIC_ENV_VAR(){
 	export PATH=${PATH}:${APP_BIN}
 	export SHELL_BIN=${SHELL_BOX_PATH}/bin/sh/
 	export PASSWD_FILE=${SHELL_BOX_PATH}/conf/passwd.conf
+	export TEMP_PATH=${SHELL_BOX_PATH}/temp
 	export TEMP_UNZIP_PATH=${SHELL_BOX_PATH}/temp/unzip/
 	export INPUT_DIR=${TEMP_UNZIP_PATH}
-	export RCLONE="/datasets/DAria2/conf/rclone.conf"
+	export RCLONE="${SHELL_BOX_PATH}/conf/rclone.conf"
 	INI_MKDIR ${CONFIG_FILE%\/*}
 	INI_MKDIR ${SHELL_BIN%\/*}
 	INI_MKDIR ${TEMP_UNZIP_PATH}

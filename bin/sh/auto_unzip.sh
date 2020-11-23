@@ -40,7 +40,7 @@ FILE_NUM=0
 TEMP_FILE_LIST=${TEMP_PATH}/list.txt
 DUMMY="."
 TRY_PASS=""
-SET_SUCC_FILE_LIST && DEL_BLANK_FOLDER
+DEL_BLANK_FOLDER
 #-------------------------------------------------------------------
 while true
 do
@@ -96,7 +96,7 @@ do
 	fi
 done
 DEL_BLANK_FOLDER > /dev/null 2>&1
-rclone move ${TEMP_UNZIP_PATH} OneDrive:/ -v --transfers=${MAXPARALLEL} --cache-chunk-size 16M --no-traverse --config "${RCLONE}"
+rclone move ${TEMP_UNZIP_PATH} OneDrive:/ -v --transfers=5 --cache-chunk-size 16M --no-traverse --config "${RCLONE}"
 wait && DEL_BLANK_FOLDER > /dev/null 2>&1
 #-------------------------------------------------------------------
 IFS=$OLD_IFS
