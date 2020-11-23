@@ -27,13 +27,14 @@ APT_INSTALL(){
 	sudo echo "deb http://mirrors.aliyun.com/debian/ buster-backports main non-free contrib" >> /etc/apt/sources.list.d/aliyun.list
 	sudo echo "deb-src http://mirrors.aliyun.com/debian/ buster-backports main non-free contrib" >> /etc/apt/sources.list.d/aliyun.list
 	sudo apt-get update -y
-	for i in p7zip-full p7zip-rar file rsync dos2unix cron wget curl nano ca-certificates findutils jq tar gzip dpkg
+	for i in p7zip-full p7zip-rar file rsync dos2unix cron wget curl nano ca-certificates findutils jq tar gzip dpkg stress-ng
 	do
 		apt-get install ${i} -y
 	done
 	if [[ ! -s /etc/ssl/certs/ca-certificates.crt ]]; then
         wget -qO- git.io/ca-certificates.sh | bash
     fi
+    curl https://rclone.org/install.sh | sudo bash
 	IFS=$(echo -en "\n\b")
 }
 check_pid() {
@@ -100,7 +101,7 @@ LICENSE
     done
     sed -i "s@^\(dir=\).*@\1${download_path}@" ${aria2_conf}
     sed -i "s@/root/.aria2/@${aria2_conf_dir}/@" ${aria2_conf_dir}/*.conf
-    sed -i "s@^\(rpc-secret=\).*@\1$(date +%s%N | md5sum | head -c 6)@" ${aria2_conf}
+    sed -i "s@^\(rpc-secret=\).*@\1e9965@" ${aria2_conf}
     sed -i "s@^#\(retry-on-.*=\).*@\1true@" ${aria2_conf}
     sed -i "s@^\(max-connection-per-server=\).*@\132@" ${aria2_conf}
     sed -i '/complete/'d ${aria2_conf}

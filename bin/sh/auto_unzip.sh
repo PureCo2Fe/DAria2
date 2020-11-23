@@ -64,8 +64,7 @@ do
 	do
 		if [[ ${DUMMY%%.*} != ${i%%.*} ]]
 		then
-			CONC_PATH ${i} 0
-			FILE_LIST[${FILE_NUM}]=${a}
+			FILE_LIST[${FILE_NUM}]=${i}
 			DUMMY=${i}
 			let "FILE_NUM++"
 		fi
