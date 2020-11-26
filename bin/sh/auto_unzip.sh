@@ -1,10 +1,8 @@
 #!/bin/bash
+DOWNFILE=${3}
 OLD_IFS=$IFS
 IFS=$(echo -en "\n\b")
 #-------------------------------------------------------------------
-DRAWLINE(){
-	echo -e "${yellow}================================================================================${plain}"
-}
 UNZIP_MULTI(){
 	temp_fifo="/tmp/$$.fifo"
 	mkfifo ${temp_fifo}
@@ -41,21 +39,26 @@ TRY_PASS=""
 while true
 do
 	let "NUM_RUN++"
-	DRAWLINE
 	mkdir -p ${TEMP_UNZIP_PATH} > /dev/null 2>&1
-	CHECKFILES_LIST=$(find ${INPUT_DIR} -type f -name "*" )
-	UNZIP_MULTI 256
-	wait && SET_TEMP_FILE_LIST
-	for i in ${CHECKFILES_LIST}
-	do
-		read -u4
-		{
-			CHECK_ARC $i
-			[[ $? == 1 ]] && echo "$i" >> ${TEMP_FILE_LIST}
-			echo >&4
-		}&
-	done
-	wait && exec 4>&-
+	if [[ ! ${NUM_RUN} == 1 ]]
+	then
+		CHECKFILES_LIST=$(find ${INPUT_DIR} -type f -name "*" )
+		UNZIP_MULTI 256
+		wait && SET_TEMP_FILE_LIST
+		for i in ${CHECKFILES_LIST}
+		do
+			read -u4
+			{
+				CHECK_ARC $i
+				[[ $? == 1 ]] && echo "$i" >> ${TEMP_FILE_LIST}
+				echo >&4
+			}&
+		done
+		wait && exec 4>&-
+	else
+		CHECK_ARC ${DOWNFILE}
+		[[ $? == 1 ]] && echo "$i" >> ${TEMP_FILE_LIST}
+	fi
 	for i in $(cat ${TEMP_FILE_LIST}| sort -n)
 	do
 		if [[ ${DUMMY%%.*} != ${i%%.*} ]]
@@ -65,6 +68,7 @@ do
 			let "FILE_NUM++"
 		fi
 	done
+#-----------------------------------------------------------------------
 	if [[ ${#FILE_LIST[@]} > 0 ]]
 	then
 		UNZIP_MULTI ${UNZIP_THREAD} && wait
@@ -74,7 +78,7 @@ do
 			{
 				for TRY_PASS in ${PASSWD[@]}
 				do
-					7z x -y -r -bsp1 -bso0 -bse0 -aot -p${TRY_PASS} -o${TEMP_UNZIP_PATH}$(echo -ne ${i##*\/} | grep -oE "[^\.]+"|head -1) ${i}
+					7z x -y -r -bsp1 -bso0 -bse0 -aot -p${TRY_PASS} -o${TEMP_UNZIP_PATH}$(echo -ne ${i//${TEMP_UNZIP_PATH}/} | grep -oE "[^\.]+"|head -1) ${i}
 					[[ $? != 2 ]] && break
 				done
 				echo >&4
@@ -82,17 +86,14 @@ do
 		done
 		wait && exec 4>&-
 	#Remove All Succ File
-		for i in $(cat ${TEMP_FILE_LIST})
-		do
-			rm -rf ${i}
-		done
+		for i in $(cat ${TEMP_FILE_LIST}) ; do rm -rf ${i} ;done
 		unset FILE_LIST
 	else
 		break
 	fi
 done
 DEL_BLANK_FOLDER > /dev/null 2>&1
-rclone move ${TEMP_UNZIP_PATH} OneDrive:/ -v --transfers=5 --cache-chunk-size 16M --no-traverse --config "${RCLONE}"
+rclone move ${DOWNFILE} OneDrive:/ -v --transfers=5 --cache-chunk-size 16M --no-traverse --config "${RCLONE}"
 wait && DEL_BLANK_FOLDER > /dev/null 2>&1
 #-------------------------------------------------------------------
 IFS=$OLD_IFS

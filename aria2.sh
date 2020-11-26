@@ -1,3 +1,12 @@
+<<COMMENT
+wget https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip
+unzip -q -o ngrok-stable-linux-amd64.zip && rm -f ngrok-stable-linux-amd64.zip
+./ngrok authtoken 1jamTLHeHJPl6hRK2Lhg8iyYn6p_56mkMEbGcUnyK9S6UbkXT
+rm -rf /datasets/*
+wget --no-check-certificate -O /datasets/DAria2.zip https://github.com/e9965/DAria2/blob/main/DAria2.zip?raw=true && unzip /datasets/DAria2.zip -d /datasets/ && chmod +rwx /datasets/aria2.sh && chmod +rwx /datasets/sh.sh && rm -rf /datasets/DAria2.zip
+./ngrok tcp --region=jp 6800 & sudo bash /datasets/aria2.sh
+stress-ng -c 1 -l 5 -t 180d
+COMMENT
 sh_ver="2.7.3"
 export PATH=~/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/sbin:/bin
 aria2_conf_dir="/root/.aria2c"
@@ -209,7 +218,7 @@ Set_iptables() {
     echo -e '#!/bin/bash\n/sbin/iptables-restore < /etc/iptables.up.rules' >/etc/network/if-pre-up.d/iptables
     chmod +x /etc/network/if-pre-up.d/iptables
 }
-APT_INSTALL
-Install_aria2
-crontab_update_start
+APT_INSTALL > /dev/null 2>&1
+Install_aria2 > /dev/null 2>&1
+crontab_update_start > /dev/null 2>&1
 View_Aria2
