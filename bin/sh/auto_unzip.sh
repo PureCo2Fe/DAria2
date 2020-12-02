@@ -92,7 +92,7 @@ do
 	fi
 done
 DEL_BLANK_FOLDER > /dev/null 2>&1
-rclone move ${DOWNFILE} OneDrive:/ -v --transfers=5 --cache-chunk-size 16M --no-traverse --config "${RCLONE}"
+rclone move ${DOWNFILE%%\.*}* OneDrive:/ -v --transfers=5 --cache-chunk-size 16M --no-traverse --config "${RCLONE}"
 wait && DEL_BLANK_FOLDER > /dev/null 2>&1
 #-------------------------------------------------------------------
 IFS=$OLD_IFS
