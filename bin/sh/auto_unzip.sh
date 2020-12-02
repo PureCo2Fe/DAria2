@@ -56,7 +56,7 @@ do
 		wait && exec 4>&-
 	else
 		CHECK_ARC ${DOWNFILE}
-		[[ $? == 1 ]] && echo "$i" >> ${TEMP_FILE_LIST}
+		[[ $? == 1 ]] && echo "${DOWNFILE}" >> ${TEMP_FILE_LIST}
 	fi
 	for i in $(cat ${TEMP_FILE_LIST}| sort -n)
 	do
