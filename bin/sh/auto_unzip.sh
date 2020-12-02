@@ -1,6 +1,7 @@
 #!/bin/bash
 OLD_IFS=$IFS
 IFS=$(echo -en "\n\b")
+DSET="OneDrive:/"
 #-------------------------------------------------------------------
 UNZIP_MULTI(){
 	temp_fifo="/tmp/$$.fifo"
@@ -41,7 +42,7 @@ do
 	mkdir -p ${TEMP_UNZIP_PATH} > /dev/null 2>&1
 	if [[ ! ${NUM_RUN} == 1 ]]
 	then
-		CHECKFILES_LIST=$(find ${INPUT_DIR} -type f -name "*" )
+		CHECKFILES_LIST=$(find ${DOWNFILE} -type f -name "*" )
 		UNZIP_MULTI 256
 		wait && SET_TEMP_FILE_LIST
 		for i in ${CHECKFILES_LIST}
@@ -56,7 +57,7 @@ do
 		wait && exec 4>&-
 	else
 		CHECK_ARC ${DOWNFILE}
-		[[ $? == 1 ]] && echo "${DOWNFILE}" >> ${TEMP_FILE_LIST}
+		[[ $? == 1 ]] && echo "${DOWNFILE}" >> ${TEMP_FILE_LIST} && DOWNFILE=${DOWNFILE%%.*}
 	fi
 	for i in $(cat ${TEMP_FILE_LIST}| sort -n)
 	do
@@ -92,7 +93,8 @@ do
 	fi
 done
 DEL_BLANK_FOLDER > /dev/null 2>&1
-rclone move ${DOWNFILE%%\.*}* OneDrive:/ -v --transfers=5 --cache-chunk-size 16M --no-traverse --config "${RCLONE}"
-wait && DEL_BLANK_FOLDER > /dev/null 2>&1
+[[ -d ${DOWNFILE} ]] && DSET=${DSET}${DOWNFILE##*/} && rlone mkdir ${DSET} --config "${RCLONE}"
+rclone move ${DOWNFILE} ${DSET} -v --transfers=5 --cache-chunk-size 16M --no-traverse --create-empty-src-dirs --delete-empty-src-dirs --config "${RCLONE}"
+wait && find ${TEMP_UNZIP_PATH} type d -empty -exec rm -rf {} \;
 #-------------------------------------------------------------------
 IFS=$OLD_IFS
