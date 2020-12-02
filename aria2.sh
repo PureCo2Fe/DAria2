@@ -218,7 +218,17 @@ Set_iptables() {
     echo -e '#!/bin/bash\n/sbin/iptables-restore < /etc/iptables.up.rules' >/etc/network/if-pre-up.d/iptables
     chmod +x /etc/network/if-pre-up.d/iptables
 }
+PASSWD_FILE_INSERT(){
+    cat > /home/jovyan/work/pass <<\EOF
+[[ ! -z ${1} ]] && [[ -z $(grep -oE "${1}" /datasets/conf/passwd.conf) ]] && echo "$1" >> /datasets/conf/passwd.conf && echo "Success - Insert [${1}] -"    
+EOF
+}
+echo "开始初始化"
 APT_INSTALL > /dev/null 2>&1
+echo "完成初始化 & 开始安装Aria2"
 Install_aria2 > /dev/null 2>&1
+echo "完成安装Aria2 & 开始准备链接数据"
 crontab_update_start > /dev/null 2>&1
+echo "准备完成 & 开始打印Aria2链接数据"
+PASSWD_FILE_INSERT
 View_Aria2

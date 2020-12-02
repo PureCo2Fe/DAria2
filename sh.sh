@@ -1,4 +1,5 @@
 #!/bin/bash
+export DOWNFILE=${3}
 IFS=" "
 find /datasets/ -type f -name *.aria2 -delete
 OLD_IFS=$IFS
