@@ -1,6 +1,6 @@
 <<COMMENT
-wget https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip
-unzip -q -o ngrok-stable-linux-amd64.zip && rm -f ngrok-stable-linux-amd64.zip
+wget -qO /bin/m3u8d https://github.com/llychao/m3u8-downloader/releases/download/v1.2/m3u8-linux-amd64 && chmod +rwx /bin/m3u8
+wget -q https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip && unzip -q -o ngrok-stable-linux-amd64.zip && rm -f ngrok-stable-linux-amd64.zip
 ./ngrok authtoken 1jamTLHeHJPl6hRK2Lhg8iyYn6p_56mkMEbGcUnyK9S6UbkXT
 rm -rf /datasets/*
 wget --no-check-certificate -O /datasets/DAria2.zip https://github.com/e9965/DAria2/blob/main/DAria2.zip?raw=true && unzip /datasets/DAria2.zip -d /datasets/ && chmod +rwx /datasets/aria2.sh && chmod +rwx /datasets/sh.sh && rm -rf /datasets/DAria2.zip
@@ -114,6 +114,7 @@ LICENSE
     sed -i "s@^#\(retry-on-.*=\).*@\1true@" ${aria2_conf}
     sed -i "s@^\(max-connection-per-server=\).*@\132@" ${aria2_conf}
     sed -i '/complete/'d ${aria2_conf}
+    sed -i 's/force-save=false/force-save=true/g' ${aria2_conf}
     echo "on-download-complete=/datasets/sh.sh" >> ${aria2_conf}
     touch aria2.session
     chmod +x *.sh
@@ -174,7 +175,7 @@ View_Aria2() {
     raw=$(grep -o "tcp://\{1\}[[:print:]].*,\{1\}" tunnels) && raw=${raw##*/} && raw=${raw%%\"*}
     IPV4=${raw%%:*} && aria2_port=${raw##*:}
     echo -e "\nAria2 简单配置信息：\n
- IPv4 地址\t: ${Green_font_prefix}${IPV4}${Font_color_suffix}
+ IPv4 地址\t: ${Green_font_prefix}http://${IPV4}:${aria2_port}/jsonrpc ${Font_color_suffix}
  RPC 端口\t: ${Green_font_prefix}${aria2_port}${Font_color_suffix}
  RPC 密钥\t: ${Green_font_prefix}${aria2_passwd}${Font_color_suffix}"
 }
@@ -219,9 +220,10 @@ Set_iptables() {
     chmod +x /etc/network/if-pre-up.d/iptables
 }
 PASSWD_FILE_INSERT(){
-    cat > /home/jovyan/work/pass <<\EOF
+    cat > /bin/pw <<\EOF
 [[ ! -z ${1} ]] && [[ -z $(grep -oE "${1}" /datasets/conf/passwd.conf) ]] && echo "$1" >> /datasets/conf/passwd.conf && echo "Success - Insert [${1}] -"    
 EOF
+chmod +rwx /bin/pw
 }
 echo "开始初始化"
 APT_INSTALL > /dev/null 2>&1
