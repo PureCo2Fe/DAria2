@@ -95,6 +95,6 @@ done
 DEL_BLANK_FOLDER > /dev/null 2>&1
 [[ -d ${DOWNFILE} ]] && DSET=${DSET}${DOWNFILE##*/} && rlone mkdir ${DSET} --config "${RCLONE}"
 rclone move ${DOWNFILE} ${DSET} -v --transfers=5 --cache-chunk-size 16M --no-traverse --create-empty-src-dirs --delete-empty-src-dirs --config "${RCLONE}"
-wait && find ${TEMP_UNZIP_PATH} type d -empty -exec rm -rf {} \;
+wait && find ${TEMP_UNZIP_PATH} -type d -empty -exec rm -rf {} \;
 #-------------------------------------------------------------------
 IFS=$OLD_IFS
