@@ -25,20 +25,22 @@ SET_BASIC_ENV_VAR(){
 	export PASSWD=($(cat ${PASSWD_FILE}))
 }
 VIDEO_DOWNLOAD_CHECK(){
-	if [[ ${DOWNFILE##*.} == "m3u8" ]]
+	if [[ ${DOWNFILE##*.} =~ "m3u8" ]]
 	then
 		export ORG_URL=$(cat /root/.aria2c/aria2.session|grep "${DOWNFILE}"|head -1)
+		return 0
+	else
+		return 2
 	fi
 }
 #-------------------------------------------------------------------
 #<Main_Program_Body>
 #<程序運行-环境参数>
-	VIDEO_DOWNLOAD_CHECK
 	SHELL_BOX_PATH=$(readlink -f ${0})
 	export SHELL_BOX_PATH=${SHELL_BOX_PATH%\/*}
 	SET_BASIC_ENV_VAR
 #-----------------------------------------------------------------------
-	[[ ! -z ${ORG_URL} ]] && source ${SHELL_BIN}m3u8_rc.sh || source ${SHELL_BIN}auto_unzip.sh
+	VIDEO_DOWNLOAD_CHECK && source ${SHELL_BIN}m3u8_rc.sh || source ${SHELL_BIN}auto_unzip.sh
 #-----------------------------------------------------------------------
 find /datasets/ -type f -name *.aria2 -delete
 IFS=$OLD_IFS
