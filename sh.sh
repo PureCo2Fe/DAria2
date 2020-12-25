@@ -27,7 +27,7 @@ SET_BASIC_ENV_VAR(){
 VIDEO_DOWNLOAD_CHECK(){
 	if [[ ${DOWNFILE##*.} =~ "m3u8" ]]
 	then
-		export ORG_URL=$(cat /root/.aria2c/aria2.session|grep "${DOWNFILE}"|head -1)
+		export ORG_URL=$(cat /root/.aria2c/aria2.session|grep "${DOWNFILE##*\/}"|head -1)
 		return 0
 	else
 		return 2
