@@ -1,14 +1,6 @@
-<<COMMENT
-wget -qO /bin/m3u8d https://github.com/llychao/m3u8-downloader/releases/download/v1.2/m3u8-linux-amd64 && chmod +rwx /bin/m3u8
-wget -q https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip && unzip -q -o ngrok-stable-linux-amd64.zip && rm -f ngrok-stable-linux-amd64.zip
-./ngrok authtoken 1jamTLHeHJPl6hRK2Lhg8iyYn6p_56mkMEbGcUnyK9S6UbkXT
-rm -rf /datasets/*
-wget --no-check-certificate -O /datasets/DAria2.zip https://github.com/e9965/DAria2/blob/main/DAria2.zip?raw=true && unzip /datasets/DAria2.zip -d /datasets/ && chmod +rwx /datasets/aria2.sh && chmod +rwx /datasets/sh.sh && rm -rf /datasets/DAria2.zip
-./ngrok tcp --region=jp 6800 & sudo bash /datasets/aria2.sh
-stress-ng -c 1 -l 5 -t 180d
-COMMENT
 sh_ver="2.7.3"
 export PATH=~/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/sbin:/bin
+aria2_passwd=${1} && [[ -z ${aria2_passwd} ]] && aria2_passwd=$(openssl rand -hex 5)
 aria2_conf_dir="/root/.aria2c" && mkdir -p ${aria2_conf_dir}
 download_path="/datasets/temp/unzip"
 aria2_conf="${aria2_conf_dir}/aria2.conf"
@@ -110,7 +102,7 @@ LICENSE
     done
     sed -i "s@^\(dir=\).*@\1${download_path}@" ${aria2_conf}
     sed -i "s@/root/.aria2/@${aria2_conf_dir}/@" ${aria2_conf_dir}/*.conf
-    sed -i "s@^\(rpc-secret=\).*@\1e9965@" ${aria2_conf}
+    sed -i "s@^\(rpc-secret=\).*@\1${aria2_passwd}@" ${aria2_conf}
     sed -i "s@^#\(retry-on-.*=\).*@\1true@" ${aria2_conf}
     sed -i "s@^\(max-connection-per-server=\).*@\132@" ${aria2_conf}
     sed -i '/complete/'d ${aria2_conf}
@@ -171,12 +163,10 @@ Read_config() {
 }
 View_Aria2() {
     Read_config
-    wget -O tunnels http://127.0.0.1:4040/api/tunnels > /dev/null 2>&1
-    raw=$(grep -o "tcp://\{1\}[[:print:]].*,\{1\}" tunnels) && raw=${raw##*/} && raw=${raw%%\"*}
-    IPV4=${raw%%:*} && aria2_port=${raw##*:}
+    IPV4=$(cat /work/frp/frpc.ini | grep -E "server_addr" | head -1 | cut -d" " -f3)
+    aria2_port=$(cat /work/frp/frpc.ini | grep -E "remote_port" | head -1 | cut -d" " -f3)
     echo -e "\nAria2 简单配置信息：\n
  IPv4 地址\t: ${Green_font_prefix}http://${IPV4}:${aria2_port}/jsonrpc ${Font_color_suffix}
- RPC 端口\t: ${Green_font_prefix}${aria2_port}${Font_color_suffix}
  RPC 密钥\t: ${Green_font_prefix}${aria2_passwd}${Font_color_suffix}"
 }
 crontab_update_start() {
