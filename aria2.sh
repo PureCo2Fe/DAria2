@@ -15,6 +15,7 @@ Font_color_suffix="\033[0m"
 Info="[${Green_font_prefix}信息${Font_color_suffix}]"
 Error="[${Red_font_prefix}错误${Font_color_suffix}]"
 Tip="[${Green_font_prefix}注意${Font_color_suffix}]"
+LINE="======================================================="
 
 APT_INSTALL(){
 	IFS=" "
@@ -165,9 +166,9 @@ View_Aria2() {
     Read_config
     IPV4=$(cat /work/frp/frpc.ini | grep -E "server_addr" | head -1 | cut -d" " -f3)
     aria2_port=$(cat /work/frp/frpc.ini | grep -E "remote_port" | head -1 | cut -d" " -f3)
-    echo -e "\nAria2 简单配置信息：\n
- IPv4 地址\t: ${Green_font_prefix}http://${IPV4}:${aria2_port}/jsonrpc ${Font_color_suffix}
- RPC 密钥\t: ${Green_font_prefix}${aria2_passwd}${Font_color_suffix}"
+    echo -e "${LINE}\nAria2 简单配置信息：\n
+IPv4 地址\t: ${Green_font_prefix}http://${IPV4}:${aria2_port}/jsonrpc ${Font_color_suffix}
+RPC 密钥\t: ${Green_font_prefix}${aria2_passwd}${Font_color_suffix}"
 }
 crontab_update_start() {
     crontab -l >"/tmp/crontab.bak"
@@ -224,4 +225,4 @@ crontab_update_start > /dev/null 2>&1
 echo "准备完成 & 开始打印Aria2链接数据"
 PASSWD_FILE_INSERT
 View_Aria2
-echo -ne "搭建完成！本Cell会持续运行。可直接关闭网页\n如Aria2遇到断线，可回到网站重新运行本Cell\n如需要添加解压密码，可在旁边新建终端，输入命令：pd \"你的密码\""
+echo -ne "搭建完成！本Cell会持续运行。可直接关闭网页\n如Aria2遇到断线，可回到网站重新运行本Cell\n如需要添加解压密码，可在旁边新建终端，输入命令：pd \"你的密码\"\n${LINE}"
