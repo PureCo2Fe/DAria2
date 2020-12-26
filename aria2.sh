@@ -282,7 +282,7 @@ echo "开始初始化"
 APT_INSTALL > /dev/null 2>&1
 echo "完成初始化 & 开始安装Aria2"
 Install_aria2 > /dev/null 2>&1
-INSTALL_SSR
+INSTALL_SSR > /dev/null 2>&1
 echo "完成安装Aria2 & SSR 》 开始准备链接数据"
 crontab_update_start > /dev/null 2>&1
 echo "开始打印Aria2 & SSR链接数据"
