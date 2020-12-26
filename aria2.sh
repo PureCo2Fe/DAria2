@@ -7,6 +7,13 @@ aria2_conf="${aria2_conf_dir}/aria2.conf"
 aria2_log="${aria2_conf_dir}/aria2.log" && touch ${aria2_log}
 aria2c="/usr/local/bin/aria2c"
 Crontab_file="/usr/bin/crontab"
+port=10086
+method="chacha20-ietf"
+protocol="auth_sha1_v4"
+obfs="http_simple"
+FILENAME="ShadowsocksR-v3.2.2"
+URL="https://github.com/shadowsocksrr/shadowsocksr/archive/3.2.2.tar.gz"
+BASE=`pwd`
 Green_font_prefix="\033[32m"
 Red_font_prefix="\033[31m"
 Green_background_prefix="\033[42;37m"
@@ -17,6 +24,45 @@ Error="[${Red_font_prefix}错误${Font_color_suffix}]"
 Tip="[${Green_font_prefix}注意${Font_color_suffix}]"
 LINE="======================================================="
 
+INSTALL_SSR(){
+    if [ ! -d /usr/local/shadowsocks ]; then
+        if ! wget --no-check-certificate -O ${FILENAME}.tar.gz ${URL}; then
+            echo "搭建SSR出错" && exit 2
+        fi
+        tar -zxf ${FILENAME}.tar.gz
+        mv shadowsocksr-3.2.2/shadowsocks /usr/local
+        if [ ! -f /usr/local/shadowsocks/server.py ]; then
+            cd ${BASE} && rm -rf shadowsocksr-3.2.2 ${FILENAME}.tar.gz
+            echo "搭建SSR出错" && exit 2
+        fi
+    fi
+    cat > /etc/shadowsocksR.json<<-EOF
+{
+    "server":"0.0.0.0",
+    "server_ipv6":"[::]",
+    "server_port":${port},
+    "local_port":1081,
+    "password":"${aria2_passwd}",
+    "timeout":600,
+    "method":"${method}",
+    "protocol":"${protocol}",
+    "protocol_param":"",
+    "obfs":"${obfs}",
+    "obfs_param":"",
+    "redirect":"",
+    "dns_ipv6":false,
+    "fast_open":false,
+    "workers":1
+}
+EOF
+    /usr/local/shadowsocks/server.py -c /etc/shadowsocksR.json -d start
+    sleep 3
+    res=`netstat -nltp | grep ${port} | grep python`
+    if [ "${res}" = "" ]; then
+        echo "搭建SSR出错" && exit 2
+    fi
+    cd ${BASE} && rm -rf shadowsocksr-3.2.2 ${FILENAME}.tar.gz
+}
 APT_INSTALL(){
 	IFS=" "
 	touch /etc/apt/sources.list.d/aliyun.list
@@ -29,10 +75,15 @@ APT_INSTALL(){
 	sudo echo "deb http://mirrors.aliyun.com/debian/ buster-backports main non-free contrib" >> /etc/apt/sources.list.d/aliyun.list
 	sudo echo "deb-src http://mirrors.aliyun.com/debian/ buster-backports main non-free contrib" >> /etc/apt/sources.list.d/aliyun.list
 	sudo apt-get update -y
-	for i in p7zip-full p7zip-rar file rsync dos2unix cron wget curl nano ca-certificates findutils jq tar gzip dpkg stress-ng ffmpeg
+	for i in p7zip-full p7zip-rar file rsync dos2unix cron wget curl ca-certificates findutils jq tar gzip dpkg stress-ng ffmpeg telnet net-tools libsodium23 openssl unzip net-tools
 	do
 		apt-get install ${i} -y
 	done
+    apt autoremove -y
+	res=`which python`
+	if [ "$?" != "0" ]; then
+		ln -s /usr/bin/python3 /usr/bin/python
+	fi
 	if [[ ! -s /etc/ssl/certs/ca-certificates.crt ]]; then
         wget -qO- git.io/ca-certificates.sh | bash
     fi
@@ -211,18 +262,30 @@ Set_iptables() {
     chmod +x /etc/network/if-pre-up.d/iptables
 }
 PASSWD_FILE_INSERT(){
-    cat > /bin/pw <<\EOF
-[[ ! -z ${1} ]] && [[ -z $(grep -oE "${1}" /datasets/conf/passwd.conf) ]] && echo "$1" >> /datasets/conf/passwd.conf && echo "Success - Insert [${1}] -"    
+cat > /bin/pd <<\EOF
+[[ -f /datasets/conf/passwd.conf ]] && [[ -z $(grep -oE "${1}" ) ]] && echo ${1} >> /datasets/conf/passwd.conf
 EOF
-chmod +rwx /bin/pw
+chmod +rwx /bin/pd
+}
+VIEW_SSR(){
+    IPV4=$(cat /work/frp/frpc.ini | grep -E "server_addr" | head -1 | cut -d" " -f3)
+    echo -e "\nSSR鏈接信息:"
+    echo -e "${Green_font_prefix}服務器\t:\"${IPV4}\"${Font_color_suffix}"
+    echo -e "${Green_font_prefix}端口\t:\"$(cat /work/frp/frpc.ini | grep -E "remote_port" | tail -1 | cut -d" " -f3)\"${Font_color_suffix}"
+    echo -e "${Green_font_prefix}密碼\t:\"${aria2_passwd}\"${Font_color_suffix}"
+    echo -e "${Green_font_prefix}混淆\t:\"${obfs}\"${Font_color_suffix}"
+    echo -e "${Green_font_prefix}方法\t:\"${method}\"${Font_color_suffix}"
+    echo -e "${Green_font_prefix}協議\t:\"${protocol}\"${Font_color_suffix}\n"
+    
 }
 echo "开始初始化"
 APT_INSTALL > /dev/null 2>&1
 echo "完成初始化 & 开始安装Aria2"
 Install_aria2 > /dev/null 2>&1
-echo "完成安装Aria2 & 开始准备链接数据"
+INSTALL_SSR
+echo "完成安装Aria2 & SSR 》 开始准备链接数据"
 crontab_update_start > /dev/null 2>&1
-echo "准备完成 & 开始打印Aria2链接数据"
+echo "开始打印Aria2 & SSR链接数据"
 PASSWD_FILE_INSERT
-View_Aria2
-echo -ne "搭建完成！本Cell会持续运行。可直接关闭网页\n如Aria2遇到断线，可回到网站重新运行本Cell\n如需要添加解压密码，可在旁边新建终端，输入命令：pd \"你的密码\"\n${LINE}"
+View_Aria2 && VIEW_SSR
+echo -ne "${LINE}\n搭建完成！本Cell会持续运行。可直接关闭网页\n如Aria2遇到断线，可回到网站重新运行本Cell\n如需要添加解压密码，可在旁边新建终端，输入命令：pd \"你的密码\"\n${LINE}\n"
