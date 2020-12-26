@@ -84,6 +84,7 @@ APT_INSTALL(){
 	if [ "$?" != "0" ]; then
 		ln -s /usr/bin/python3 /usr/bin/python
 	fi
+    pip install --user m3u8downloader
 	if [[ ! -s /etc/ssl/certs/ca-certificates.crt ]]; then
         wget -qO- git.io/ca-certificates.sh | bash
     fi
