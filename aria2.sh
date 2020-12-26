@@ -9,7 +9,7 @@ stress-ng -c 1 -l 5 -t 180d
 COMMENT
 sh_ver="2.7.3"
 export PATH=~/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/sbin:/bin
-aria2_conf_dir="/root/.aria2c"
+aria2_conf_dir="/root/.aria2c" && mkdir -p ${aria2_conf_dir}
 download_path="/datasets/temp/unzip"
 aria2_conf="${aria2_conf_dir}/aria2.conf"
 aria2_log="${aria2_conf_dir}/aria2.log" && touch ${aria2_log}
