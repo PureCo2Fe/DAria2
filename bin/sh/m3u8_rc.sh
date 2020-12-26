@@ -4,10 +4,9 @@ IFS=$(echo -en "\n\b")
 DSET="OneDrive:/"
 MOVIEDIR="/datasets/temp"
 rm -rf ${DOWNFILE}
-[[ ! -d ${MOVIEDIR} ]] && mkdir -p ${MOVIEDIR}
+[[ ! -d ${MOVIEDIR}/movie ]] && mkdir -p ${MOVIEDIR}/movie
 #-------------------------------------------------------------------
-cd ${MOVIEDIR}
-echo "${ORG_URL}\""
+cd ${MOVIEDIR} && echo "${ORG_URL}\""
 while true
 do
     VNAME=$(openssl rand -hex 5)
