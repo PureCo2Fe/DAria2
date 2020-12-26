@@ -12,7 +12,7 @@ do
     VNAME=$(openssl rand -hex 5)
     [[ ! -f ${MOVIEDIR}/movie/${VNAME}.mp4 ]] && break
 done
-m3u8d -u="${ORG_URL}" -o="${VNAME}" -n=32 -ht=apiv2
+ffmpeg -i "${ORG_URL}" -bsf:a aac_adtstoasc -vcodec copy -c copy ${VNAME}.mp4
 if [[ $? == 0 ]]
 then
     rclone move ${MOVIEDIR}/movie/${VNAME}.mp4 ${DSET} -v --transfers=5 --cache-chunk-size 32M --no-traverse --create-empty-src-dirs --delete-empty-src-dirs --config "${RCLONE}"

@@ -27,7 +27,6 @@ SET_BASIC_ENV_VAR(){
 VIDEO_DOWNLOAD_CHECK(){
 	if [[ ${DOWNFILE##*.} =~ "m3u8" ]]
 	then
-		[[ ! -f ${APP_BIN}m3u8d ]] && wget -qO ${APP_BIN}m3u8d https://github.com/e9965/DAria2/raw/main/m3u8d && chmod +rwx ${APP_BIN}m3u8d 
 		return 0
 	else
 		return 2
