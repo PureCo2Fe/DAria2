@@ -224,3 +224,4 @@ crontab_update_start > /dev/null 2>&1
 echo "准备完成 & 开始打印Aria2链接数据"
 PASSWD_FILE_INSERT
 View_Aria2
+echo -ne "搭建完成！本Cell会持续运行。可直接关闭网页\n如Aria2遇到断线，可回到网站重新运行本Cell\n如需要添加解压密码，可在旁边新建终端，输入命令：pd \"你的密码\""
