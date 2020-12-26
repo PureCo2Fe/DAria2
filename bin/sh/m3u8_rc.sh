@@ -3,7 +3,12 @@ OLD_IFS=$IFS
 IFS=$(echo -en "\n\b")
 DSET="OneDrive:/"
 MOVIEDIR="/datasets/temp"
-export ORG_URL=$(cat /root/.aria2c/aria2.session|grep "${DOWNFILE##*\/}"|grep "http"|tail -1|sed "s/[ \t]*$//g")
+while true
+do
+    export ORG_URL=$(cat /root/.aria2c/aria2.session|grep "${DOWNFILE##*\/}"|grep "http"|tail -1|sed "s/[ \t]*$//g")
+    [[ ! -z ${ORG_URL} ]] && break
+    sleep 1s
+done
 [[ ! -d ${MOVIEDIR}/movie ]] && mkdir -p ${MOVIEDIR}/movie
 #-------------------------------------------------------------------
 cd ${MOVIEDIR}/movie && echo "${ORG_URL}\""
