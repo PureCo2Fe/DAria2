@@ -2,7 +2,7 @@
 OLD_IFS=$IFS
 IFS=$(echo -en "\n\b")
 DSET="OneDrive:/"
-MOVIEDIR="/datasets/temp/movie"
+MOVIEDIR="/datasets/temp"
 rm -rf ${DOWNFILE}
 [[ ! -d ${MOVIEDIR} ]] && mkdir -p ${MOVIEDIR}
 #-------------------------------------------------------------------
@@ -11,15 +11,15 @@ echo "${ORG_URL}\""
 while true
 do
     VNAME=$(openssl rand -hex 5)
-    [[ ! -f ${MOVIEDIR}/${VNAME}.mp4 ]] && break
+    [[ ! -f ${MOVIEDIR}/movie/${VNAME}.mp4 ]] && break
 done
-ffmpeg -i "${ORG_URL}" -bsf:a aac_adtstoasc -vcodec copy -c copy ${VNAME}.mp4
+m3u8d -u="${ORG_URL}" -o="${VNAME}" -n=32 -ht=apiv2
 if [[ $? == 0 ]]
 then
-    rclone move ${MOVIEDIR}/${VNAME}.mp4 ${DSET} -v --transfers=5 --cache-chunk-size 32M --no-traverse --create-empty-src-dirs --delete-empty-src-dirs --config "${RCLONE}"
+    rclone move ${MOVIEDIR}/movie/${VNAME}.mp4 ${DSET} -v --transfers=5 --cache-chunk-size 32M --no-traverse --create-empty-src-dirs --delete-empty-src-dirs --config "${RCLONE}"
     wait && find ${TEMP_UNZIP_PATH} -type d -empty -exec rm -rf {} \;
 else
-    rm -rf ${VNAME}*
+    rm -rf ${MOVIEDIR}/movie/${VNAME}*
 fi
 #-------------------------------------------------------------------
 IFS=$OLD_IFS
