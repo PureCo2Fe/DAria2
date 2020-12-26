@@ -3,7 +3,7 @@ OLD_IFS=$IFS
 IFS=$(echo -en "\n\b")
 DSET="OneDrive:/"
 MOVIEDIR="/datasets/temp"
-rm -rf ${DOWNFILE}
+export ORG_URL=$(cat /root/.aria2c/aria2.session|grep "${DOWNFILE##*\/}"|grep "http"|tail -1|sed "s/[ \t]*$//g")
 [[ ! -d ${MOVIEDIR}/movie ]] && mkdir -p ${MOVIEDIR}/movie
 #-------------------------------------------------------------------
 cd ${MOVIEDIR} && echo "${ORG_URL}\""
@@ -20,5 +20,6 @@ then
 else
     rm -rf ${MOVIEDIR}/movie/${VNAME}*
 fi
+rm -rf ${DOWNFILE}
 #-------------------------------------------------------------------
 IFS=$OLD_IFS
