@@ -57,7 +57,7 @@ do
 		wait && exec 4>&-
 	else
 		CHECK_ARC ${DOWNFILE}
-		[[ $? == 1 ]] && echo "${DOWNFILE}" >> ${TEMP_FILE_LIST} && DOWNFILE=${DOWNFILE%%.*}
+		[[ $? == 1 ]] && echo "${DOWNFILE}" >> ${TEMP_FILE_LIST} && DOWNFILE=${DOWNFILE%%.*}_Dir
 	fi
 	for i in $(cat ${TEMP_FILE_LIST}| sort -n)
 	do
@@ -78,7 +78,7 @@ do
 			{
 				for TRY_PASS in ${PASSWD[@]}
 				do
-					7z x -y -r -bsp1 -bso0 -bse0 -aot -p${TRY_PASS} -o${TEMP_UNZIP_PATH}$(echo -ne ${i//${TEMP_UNZIP_PATH}/} | grep -oE "[^\.]+"|head -1) ${i}
+					7z x -y -r -bsp1 -bso0 -bse0 -aot -p${TRY_PASS} -o${TEMP_UNZIP_PATH}$(echo -ne ${i//${TEMP_UNZIP_PATH}/} | grep -oE "[^\.]+"|head -1)_Dir ${i}
 					[[ $? != 2 ]] && break
 				done
 				echo >&4
