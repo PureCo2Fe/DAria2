@@ -3,6 +3,7 @@ OLD_IFS=$IFS
 IFS=$(echo -en "\n\b")
 DSET="OneDrive:/"
 MOVIEDIR="/datasets/temp"
+[[ $(whereis ffmpeg| cut -d":" -f2) = "" ]] && apt install ffmpeg -y
 while true
 do
     export ORG_URL=$(cat /root/.aria2c/aria2.session|grep "${DOWNFILE##*\/}"|grep "http"|tail -1|sed "s/[ \t]*$//g")

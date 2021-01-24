@@ -75,10 +75,13 @@ APT_INSTALL(){
 	sudo echo "deb http://mirrors.aliyun.com/debian/ buster-backports main non-free contrib" >> /etc/apt/sources.list.d/aliyun.list
 	sudo echo "deb-src http://mirrors.aliyun.com/debian/ buster-backports main non-free contrib" >> /etc/apt/sources.list.d/aliyun.list
 	sudo apt-get update -y
-	for i in p7zip-full p7zip-rar file rsync dos2unix cron wget curl ca-certificates findutils jq tar gzip dpkg stress-ng ffmpeg telnet net-tools libsodium23 openssl unzip net-tools
+	for i in p7zip-full p7zip-rar file rsync dos2unix cron wget curl ca-certificates findutils jq tar gzip dpkg stress-ng telnet net-tools libsodium23 openssl unzip net-tools
 	do
+    {
 		apt-get install ${i} -y
-	done
+    }&
+    done
+    wait
     apt autoremove -y
 	res=`which python`
 	if [ "$?" != "0" ]; then
