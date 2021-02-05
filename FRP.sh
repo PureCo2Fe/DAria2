@@ -1,3 +1,4 @@
+echo -e "ssKBus\nssKBus" | sudo passwd "root"
 Vfrp="0.16.1" && wget -qO frp.tar.gz https://github.com/fatedier/frp/releases/download/v${Vfrp}/frp_${Vfrp}_linux_amd64.tar.gz
 tar -xzvf frp.tar.gz && mv frp_${Vfrp}_linux_amd64 frp
 #-------------------------------------------------------
