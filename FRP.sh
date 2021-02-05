@@ -36,4 +36,4 @@ EOF
 #------------------------------------------------------
 wget --no-check-certificate -qO DAria2.zip https://github.com/e9965/DAria2/blob/main/DAria2.zip?raw=true && tar -vxzf DAria2.zip && chmod +rwx aria2.sh && chmod +rwx sh.sh && rm -rf DAria2.zip
 sudo bash aria2.sh e9965 && cd frp
-frpc -c /work/frp/frpc.ini & stress-ng -c 1 -l 1 -t 180d
+./frpc -c /work/frp/frpc.ini & stress-ng -c 1 -l 1 -t 180d
