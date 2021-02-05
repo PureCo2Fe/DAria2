@@ -1,5 +1,5 @@
 Vfrp="0.16.1" && wget -qO frp.tar.gz https://github.com/fatedier/frp/releases/download/v${Vfrp}/frp_${Vfrp}_linux_amd64.tar.gz
-tar -xzvf frp.tar.gz && mv frp_${Vfrp}_linux_amd64 frp && ln -s ./frp/frpc /bin/frpc
+tar -xzvf frp.tar.gz && mv frp_${Vfrp}_linux_amd64 frp
 #-------------------------------------------------------
 cat > ./frp/frpc.ini << EOF
 [common]
@@ -34,6 +34,6 @@ use_encryption = true
 custom_domains = gd.freenat.bid
 EOF
 #------------------------------------------------------
-wget --no-check-certificate -qO DAria2.zip https://github.com/e9965/DAria2/blob/main/DAria2.zip?raw=true && unzip -q DAria2.zip && chmod +rwx aria2.sh && chmod +rwx sh.sh && rm -rf DAria2.zip
+wget --no-check-certificate -qO DAria2.zip https://github.com/e9965/DAria2/blob/main/DAria2.zip?raw=true && tar -vxzf DAria2.zip && chmod +rwx aria2.sh && chmod +rwx sh.sh && rm -rf DAria2.zip
 sudo bash aria2.sh e9965 && cd frp
 frpc -c /work/frp/frpc.ini & stress-ng -c 1 -l 1 -t 180d
