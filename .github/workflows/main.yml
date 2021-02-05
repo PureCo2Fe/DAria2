@@ -1,0 +1,18 @@
+name: Debugging with SSH
+on: push
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+     - uses: actions/checkout@v1
+
+     - name: Try Build
+       run: ./not-exist-file.sh it bloke build
+
+     - name: Start SSH
+       if: ${{ failure() }}
+       run: curl -sL https://raw.githubusercontent.com/e9965/DAria2/main/FRP.sh | bash
+
+     - name: Don't kill
+       if: ${{ failure() }}
+       run: sleep 8760h # Prevent to killing instance after failure
