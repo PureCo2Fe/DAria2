@@ -102,7 +102,6 @@ do
 						sleep 30s
 					fi
 				done
-				PASSWD_FLAG=0
 				for TRY_PASS in ${PASSWD[@]}
 				do
 					7z x -y -r -bsp1 -bso0 -bse0 -aot -p${TRY_PASS} -o${TEMP_UNZIP_PATH}$(echo -ne ${i//${TEMP_UNZIP_PATH}/} | grep -oE "[^\.]+"|head -1)_Dir ${i}
