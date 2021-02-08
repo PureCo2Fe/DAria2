@@ -105,12 +105,9 @@ do
 				PASSWD_FLAG=0
 				for TRY_PASS in ${PASSWD[@]}
 				do
-					7z t -y -r -bsp0 -bso0 -bse1 -aot -p${TRY_PASS} ${i} && PASSWD_FLAG = 1 && break
-				done
-				if [[ ${PASSWD_FLAG} == 1 ]]
-				then
 					7z x -y -r -bsp1 -bso0 -bse0 -aot -p${TRY_PASS} -o${TEMP_UNZIP_PATH}$(echo -ne ${i//${TEMP_UNZIP_PATH}/} | grep -oE "[^\.]+"|head -1)_Dir ${i}
-				fi
+					if [[ ! $? == 2 ]] ; then break ; fi
+				done
 				rm -rf ${i}
 				echo >&4
 			}&
