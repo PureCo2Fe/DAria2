@@ -260,7 +260,7 @@ Set_iptables() {
 }
 PASSWD_FILE_INSERT(){
 cat > /bin/pd <<\EOF
-[[ -f /datasets/conf/passwd.conf ]] && [[ -z $(grep -oE "${1}" ) ]] && echo ${1} >> /datasets/conf/passwd.conf
+[[ -f /datasets/conf/passwd.conf ]] && [[ -n $(grep -oE "${1}" /datasets/conf/passwd.conf ) ]] && echo ${1} >> /datasets/conf/passwd.conf
 EOF
 chmod +rwx /bin/pd
 }

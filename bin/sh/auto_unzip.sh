@@ -89,7 +89,7 @@ do
 					while true
 					do
 						OUTPUT=$(7z t -y -r -bsp0 -bso0 -bse1 -aot -p${TRY_PASS} ${i})
-						if [[ -n $(echo ${OUTPUT} | grep -oE "Missing volume") ]] || [[ -n $(echo ${OUTPUT} | grep -oE "Unexpected end of archive") ]]
+						if [[ -n $(echo ${OUTPUT} | grep -oE "Missing volume") ]] && [[ -n $(echo ${OUTPUT} | grep -oE "Unexpected end of archive") ]]
 						then
 							break
 						else
