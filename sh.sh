@@ -32,12 +32,19 @@ VIDEO_DOWNLOAD_CHECK(){
 		return 2
 	fi
 }
+SLICE_CHECK(){
+	if [[ -z $(echo ${DOWNFILE} | grep -oE "\.part[[:digit:]]+\.rar") ]] || [[ -z $(echo ${DOWNFILE} | grep -oE "\.z[[:digit:]]+") ]] || [[ -z $(echo ${DOWNFILE} | grep -oE "\.7z\.[[:digit:]]+" | grep -Ev "\.7z\.001") ]]
+	then
+		exit 0
+	fi
+}
 #-------------------------------------------------------------------
 #<Main_Program_Body>
 #<程序運行-环境参数>
 	SHELL_BOX_PATH=$(readlink -f ${0})
 	export SHELL_BOX_PATH=${SHELL_BOX_PATH%\/*}
 	SET_BASIC_ENV_VAR
+	SLICE_CHECK && exit 0
 #-----------------------------------------------------------------------
 	VIDEO_DOWNLOAD_CHECK && source ${SHELL_BIN}m3u8_rc.sh || source ${SHELL_BIN}auto_unzip.sh
 #-----------------------------------------------------------------------

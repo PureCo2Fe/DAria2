@@ -32,7 +32,14 @@ SET_TEMP_FILE_LIST(){
 INPUT_DIR=${TEMP_UNZIP_PATH}
 NUM_RUN=0
 FILE_NUM=0
-TEMP_FILE_LIST=${TEMP_PATH}/list.txt
+while true
+do
+	TEMP_FILE_LIST=${TEMP_PATH}/${RANDOM}.txt
+	if [[ ! -f ${TEMP_FILE_LIST} ]]
+	then
+		break
+	fi
+done
 DUMMY="."
 TRY_PASS=""
 #-------------------------------------------------------------------
@@ -76,23 +83,38 @@ do
 		do
 			read -u4
 			{
+				PASSWD_FLAG=0
 				for TRY_PASS in ${PASSWD[@]}
 				do
-					7z x -y -r -bsp1 -bso0 -bse0 -aot -p${TRY_PASS} -o${TEMP_UNZIP_PATH}$(echo -ne ${i//${TEMP_UNZIP_PATH}/} | grep -oE "[^\.]+"|head -1)_Dir ${i}
-					[[ $? != 2 ]] && break
+					while true
+					do
+						OUTPUT=$(7z t -y -r -bsp0 -bso0 -bse1 -aot -p${TRY_PASS} ${i})
+						if [[ -n $(echo ${OUTPUT} | grep -oE "Missing volume") ]] || [[ -n $(echo ${OUTPUT} | grep -oE "Unexpected end of archive") ]]
+						then
+							break
+						else
+							sleep 30s
+						fi
+					done
+					7z t -y -r -bsp0 -bso0 -bse1 -aot -p${TRY_PASS} ${i} && PASSWD_FLAG = 1 && break
 				done
+				if [[ ${PASSWD_FLAG} == 1 ]]
+				then
+					7z x -y -r -bsp1 -bso0 -bse0 -aot -p${TRY_PASS} -o${TEMP_UNZIP_PATH}$(echo -ne ${i//${TEMP_UNZIP_PATH}/} | grep -oE "[^\.]+"|head -1)_Dir ${i}
+				fi
+				rm -rf ${i}
 				echo >&4
 			}&
 		done
 		wait && exec 4>&-
-	#Remove All Succ File
-		for i in $(cat ${TEMP_FILE_LIST}) ; do rm -rf ${i} ;done
+	#Remove All Slice File
+		for i in $(cat ${TEMP_FILE_LIST}) ; do rm -rf ${i%%\.*}.* ;done
 		unset FILE_LIST
 	else
 		break
 	fi
 done
-DEL_BLANK_FOLDER > /dev/null 2>&1
+find ${TEMP_UNZIP_PATH} -type d -empty -exec rm -rf {} \;
 [[ -d ${DOWNFILE} ]] && DSET=${DSET}${DOWNFILE##*/} && rclone mkdir ${DSET} --config "${RCLONE}"
 rclone move ${DOWNFILE} ${DSET} -v --transfers=5 --cache-chunk-size 16M --no-traverse --create-empty-src-dirs --delete-empty-src-dirs --config "${RCLONE}"
 wait && find ${TEMP_UNZIP_PATH} -type d -empty -exec rm -rf {} \;

@@ -267,12 +267,12 @@ chmod +rwx /bin/pd
 VIEW_SSR(){
     IPV4=$(cat /work/frp/frpc.ini | grep -E "server_addr" | head -1 | cut -d" " -f3)
     echo -e "\nSSR鏈接信息:"
-    echo -e "${Green_font_prefix}服務器\t:\"${IPV4}\"${Font_color_suffix}"
-    echo -e "${Green_font_prefix}端口\t:\"$(cat /work/frp/frpc.ini | grep -E "remote_port" | tail -1 | cut -d" " -f3)\"${Font_color_suffix}"
-    echo -e "${Green_font_prefix}密碼\t:\"${aria2_passwd}\"${Font_color_suffix}"
-    echo -e "${Green_font_prefix}混淆\t:\"${obfs}\"${Font_color_suffix}"
-    echo -e "${Green_font_prefix}方法\t:\"${method}\"${Font_color_suffix}"
-    echo -e "${Green_font_prefix}協議\t:\"${protocol}\"${Font_color_suffix}\n"
+    echo -e "地址\t\t: ${Green_font_prefix}\"${IPV4}\"${Font_color_suffix}"
+    echo -e "端口\t\t: ${Green_font_prefix}\"$(cat /work/frp/frpc.ini | grep -E "remote_port" | tail -1 | cut -d" " -f3)\"${Font_color_suffix}"
+    echo -e "密碼\t\t: ${Green_font_prefix}\"${aria2_passwd}\"${Font_color_suffix}"
+    echo -e "混淆\t\t: ${Green_font_prefix}\"${obfs}\"${Font_color_suffix}"
+    echo -e "方法\t\t: ${Green_font_prefix}\"${method}\"${Font_color_suffix}"
+    echo -e "協議\t\t: ${Green_font_prefix}\"${protocol}\"${Font_color_suffix}\n"
     
 }
 echo "开始初始化"
