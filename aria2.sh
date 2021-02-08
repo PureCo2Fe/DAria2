@@ -259,8 +259,10 @@ Set_iptables() {
     chmod +x /etc/network/if-pre-up.d/iptables
 }
 PASSWD_FILE_INSERT(){
+echo "cat /root/.aria2c/aria2.log" > /bin/log2 && chmod +rwx /bin/log2
+echo "" >> /datasets/conf/passwd.conf
 cat > /bin/pd <<\EOF
-[[ -f /datasets/conf/passwd.conf ]] && [[ -n $(grep -oE "${1}" /datasets/conf/passwd.conf ) ]] && echo ${1} >> /datasets/conf/passwd.conf
+[[ -f /datasets/conf/passwd.conf ]] && [[ ! -n $(grep -oE "${1}" /datasets/conf/passwd.conf ) ]] && echo ${1} >> /datasets/conf/passwd.conf
 EOF
 chmod +rwx /bin/pd
 }

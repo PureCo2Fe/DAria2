@@ -33,7 +33,7 @@ VIDEO_DOWNLOAD_CHECK(){
 	fi
 }
 SLICE_CHECK(){
-	if [[ ! -n $(echo ${DOWNFILE} | grep -oE "\.part[[:digit:]]+\.rar") ]] || [[ ! -n $(echo ${DOWNFILE} | grep -oE "\.z[[:digit:]]+") ]] || [[ ! -n $(echo ${DOWNFILE} | grep -oE "\.7z\.[[:digit:]]+" | grep -Ev "\.7z\.001") ]]
+	if [[ -n $(echo ${DOWNFILE} | grep -oE "\.part[[:digit:]]+\.rar") ]] || [[ -n $(echo ${DOWNFILE} | grep -oE "\.z[[:digit:]]+") ]] || [[ -n $(echo ${DOWNFILE} | grep -oE "\.7z\.[[:digit:]]+" | grep -Ev "\.7z\.001") ]]
 	then
 		exit 0
 	fi
