@@ -9,3 +9,4 @@ SLICE_CHECK(){
 }
 SLICE_CHECK && exit 0
 echo Happy
+max-concurrent-downloads=5
