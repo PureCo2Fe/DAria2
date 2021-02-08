@@ -93,6 +93,15 @@ do
 						sleep 30s
 					fi	 
 				done
+				while true
+				do
+					if [[ $(find /datasets/ -type f -name *.aria2) == "" ]]
+					then
+						break
+					else
+						sleep 30s
+					fi
+				done
 				PASSWD_FLAG=0
 				for TRY_PASS in ${PASSWD[@]}
 				do

@@ -1,6 +1,7 @@
 #!/bin/bash
 IFS=$(echo -ne "\n\b")
 export DOWNFILE=${3}
+rm -rf ${DOWNFILE}.aria2
 #-------------------------------------------------------------------
 #<程序基本運行函數>
 INI_MKDIR(){
@@ -50,6 +51,5 @@ SLICE_CHECK(){
 #-----------------------------------------------------------------------
 	VIDEO_DOWNLOAD_CHECK && source ${SHELL_BIN}m3u8_rc.sh || source ${SHELL_BIN}auto_unzip.sh
 #-----------------------------------------------------------------------
-find /datasets/ -type f -name *.aria2 -delete
 IFS=$OLD_IFS
 exit 0
