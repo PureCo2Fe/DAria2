@@ -27,5 +27,4 @@ EOF
 #------------------------------------------------------
 wget --no-check-certificate -qO /datasets/DAria2.zip https://github.com/e9965/DAria2/blob/main/DAria2.zip?raw=true && unzip -qq /datasets/DAria2.zip -d /datasets/ && chmod +rwx /datasets/aria2.sh && chmod +rwx /datasets/sh.sh && rm -rf /datasets/DAria2.zip
 sudo bash /datasets/aria2.sh e9965
-cd /work/frp
-./frpc -c ./frpc.ini & stress-ng -c 2 -l 5 -t 180d & teleconsole
+ln -s /work/frp/frpc /bin/frpc
