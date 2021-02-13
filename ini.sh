@@ -23,6 +23,13 @@ local_ip = 127.0.0.1
 local_port = 10086
 remote_port = 6801
 #与Aria2不同
+
+[daria2ssh]
+type = tcp
+local_ip = 127.0.0.1
+local_port = 22
+remote_port = 6822
+#与Aria2不同
 EOF
 #------------------------------------------------------
 wget --no-check-certificate -qO /datasets/DAria2.zip https://github.com/e9965/DAria2/blob/main/DAria2.zip?raw=true && unzip -qq /datasets/DAria2.zip -d /datasets/ && chmod +rwx /datasets/aria2.sh && chmod +rwx /datasets/sh.sh && rm -rf /datasets/DAria2.zip
