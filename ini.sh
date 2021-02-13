@@ -27,7 +27,7 @@ remote_port = 6801
 [daria2ssh]
 type = tcp
 local_ip = 127.0.0.1
-local_port = 22
+local_port = 6822
 remote_port = 6822
 #与Aria2不同
 EOF
