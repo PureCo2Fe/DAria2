@@ -75,7 +75,7 @@ APT_INSTALL(){
 	sudo echo "deb http://mirrors.aliyun.com/debian/ buster-backports main non-free contrib" >> /etc/apt/sources.list.d/aliyun.list
 	sudo echo "deb-src http://mirrors.aliyun.com/debian/ buster-backports main non-free contrib" >> /etc/apt/sources.list.d/aliyun.list
 	sudo apt-get update -y
-	apt-get install --ignore-missing -y p7zip-full p7zip-rar file rsync dos2unix cron wget curl ca-certificates findutils jq tar gzip dpkg telnet net-tools libsodium23 openssl unzip net-tools
+	apt-get install --ignore-missing -y p7zip-full p7zip-rar file rsync dos2unix cron wget curl ca-certificates findutils jq tar gzip dpkg telnet net-tools libsodium23 openssl unzip net-tools dnsutils
     apt autoremove -y
 	res=`which python`
 	if [ "$?" != "0" ]; then
@@ -158,6 +158,7 @@ LICENSE
     sed -i 's/force-save=false/force-save=true/g' ${aria2_conf}
     sed -i "s/max-concurrent-downloads=5/max-concurrent-downloads=2/g" ${aria2_conf}
     echo "on-download-complete=/datasets/sh.sh" >> ${aria2_conf}
+    echo "bt-external-ip=$(nslookup freenat.bid | grep -E "Address" | grep -oE "[[:dig it:]]+\.[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+" | grep -vE "^127")" >> ${aria2_conf}
     touch aria2.session
     chmod +x *.sh
     echo -e "${Info} Aria2 完美配置下载完成！"

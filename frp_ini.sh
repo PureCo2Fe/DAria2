@@ -21,11 +21,11 @@ local_port = 10086
 remote_port = 6801
 #与Aria2不同
 
-#[rclonedaria2]
-#type = tcp
-#local_ip = 127.0.0.1
-#local_port = 5572
-#remote_port = 6802
+[btaria2]
+type = tcp
+local_ip = 127.0.0.1
+local_port = 51413
+remote_port = 51413
 EOF
 ln -s /work/frp/frpc /bin/frpc
 frpc -c /work/frp/frpc.ini
