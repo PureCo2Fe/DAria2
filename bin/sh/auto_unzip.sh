@@ -101,7 +101,7 @@ do
 				done
 				while true
 				do
-					if [[ $(find /datasets/ -type f -name *.aria2) == "" ]]
+					if [[ $(find /datasets/ -type f -name $(echo ${i%%.*} | grep -oE "[^/]+$")*.aria2) == "" ]]
 					then
 						break
 					else

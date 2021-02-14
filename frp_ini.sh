@@ -28,4 +28,13 @@ local_port = 5572
 remote_port = 6802
 EOF
 ln -s /work/frp/frpc /bin/frpc
+while true
+do
+    if [[ -f "/datasets/complete" ]]
+    then
+        break
+    else
+        sleep 10s
+    fi
+done
 frpc -c /work/frp/frpc.ini
