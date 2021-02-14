@@ -1,5 +1,3 @@
-wget -qO - https://www.teleconsole.com/get.sh | sudo sh > /dev/null 2>&1
-[[ ! -d "/datasets" ]] && mkdir /datasets
 [[ ! -d "/work" ]] && mkdir /work
 rm -rf /datasets/* && rm -rf /work/frp
 Vfrp="0.16.1" && wget -qO - https://github.com/fatedier/frp/releases/download/v${Vfrp}/frp_${Vfrp}_linux_amd64.tar.gz | tar -xzC /work && mv /work/frp_${Vfrp}_linux_amd64 /work/frp
@@ -24,15 +22,9 @@ local_port = 10086
 remote_port = 6801
 #与Aria2不同
 
-[daria2ssh]
-type = tcp
-local_ip = 127.0.0.1
-local_port = 6822
-remote_port = 6822
-#与Aria2不同
 EOF
 #------------------------------------------------------
-wget --no-check-certificate -qO /datasets/DAria2.zip https://github.com/e9965/DAria2/blob/main/DAria2.zip?raw=true && unzip -qq /datasets/DAria2.zip -d /datasets/ && chmod +rwx /datasets/aria2.sh && chmod +rwx /datasets/sh.sh && rm -rf /datasets/DAria2.zip
+wget --no-check-certificate -qO /DAria2.zip https://github.com/e9965/DAria2/archive/main.zip && unzip -qq /DAria2.zip -d / && mv /DAria2-main /datasets &&chmod +rwx /datasets/aria2.sh && chmod +rwx /datasets/sh.sh && rm -rf /DAria2.zip
 sudo bash /datasets/aria2.sh e9965
 ln -s /work/frp/frpc /bin/frpc
 frpc -c /work/frp/frpc.ini & stress-ng -c 1 -l 1 -t 180d
