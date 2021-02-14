@@ -14,13 +14,19 @@ UNZIP_MULTI(){
     done
 }
 CHECK_ARC(){
-	checkarc=$(file -b ${1}) && checkarc=${checkarc%%\ *}
+	FILE_NAME=${1}
+	checkarc=$(file -b ${FILE_NAME}) && checkarc=${checkarc%%\ *}
 	case ${checkarc} in
 		RAR|rar|Rar|7-zip|7-Zip|7-Z|7-z|7z|7Z|7-ZIP|Zip|ZIP)
 		return 1
 			;;
 		*)
-		return 0
+		if [[ ( ${FILE_NAME##*.} == "7z" ) || ( ${FILE_NAME##*.} == "zip" ) || ( ${FILE_NAME##*.} == "rar" ) ]]
+		then
+			return 1
+		else
+			return 0
+		fi
 			;;
 	esac
 }
@@ -91,7 +97,7 @@ do
 						break
 					else
 						sleep 30s
-					fi	 
+					fi
 				done
 				while true
 				do
