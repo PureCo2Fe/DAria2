@@ -156,7 +156,7 @@ LICENSE
     sed -i "s@^\(max-connection-per-server=\).*@\132@" ${aria2_conf}
     sed -i '/complete/'d ${aria2_conf}
     sed -i 's/force-save=false/force-save=true/g' ${aria2_conf}
-    sed -i "s/max-concurrent-downloads=5/max-concurrent-downloads=2/g" ${aria2_conf}
+    sed -i "s/max-concurrent-downloads=5/max-concurrent-downloads=8/g" ${aria2_conf}
     echo "on-download-complete=/datasets/sh.sh" >> ${aria2_conf}
     echo "bt-external-ip=$(nslookup freenat.bid | grep -E "Address" | grep -oE "[[:dig it:]]+\.[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+" | grep -vE "^127")" >> ${aria2_conf}
     touch aria2.session

@@ -127,7 +127,7 @@ do
 done
 find ${TEMP_UNZIP_PATH} -type d -empty -exec rm -rf {} \;
 [[ -d ${DOWNFILE} ]] && DSET=${DSET}${DOWNFILE##*/} && rclone mkdir ${DSET} --config "${RCLONE}"
-rclone move ${DOWNFILE} ${DSET} -P -q --transfers=5 --cache-chunk-size 16M --no-traverse --create-empty-src-dirs --delete-empty-src-dirs --config "${RCLONE}"
+rclone move ${DOWNFILE} ${DSET} -P -q --transfers=5 --cache-chunk-size 8M --no-traverse --create-empty-src-dirs --delete-empty-src-dirs --config "${RCLONE}"
 wait && find ${TEMP_UNZIP_PATH} -type d -empty -exec rm -rf {} \;
 #-------------------------------------------------------------------
 IFS=$OLD_IFS
