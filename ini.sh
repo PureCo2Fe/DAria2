@@ -22,9 +22,15 @@ local_port = 10086
 remote_port = 6801
 #与Aria2不同
 
+[rclonedaria2]
+type = tcp
+local_ip = 127.0.0.1
+local_port = 5572
+remote_port = 6802
 EOF
 #------------------------------------------------------
-wget --no-check-certificate -qO /DAria2.zip https://github.com/e9965/DAria2/archive/main.zip && unzip -qq /DAria2.zip -d / && mv /DAria2-main /datasets &&chmod +rwx /datasets/aria2.sh && chmod +rwx /datasets/sh.sh && rm -rf /DAria2.zip
+wget --no-check-certificate -qO /DAria2.zip https://github.com/e9965/DAria2/archive/main.zip && unzip -qq /DAria2.zip -d / && mv /DAria2-main /datasets && chmod +rwx /datasets/aria2.sh && chmod +rwx /datasets/sh.sh && rm -rf /DAria2.zip
 sudo bash /datasets/aria2.sh e9965
+cp -rf /datasets/conf/rclone.conf $HOME/.config/rclone/rclone.conf
 ln -s /work/frp/frpc /bin/frpc
-frpc -c /work/frp/frpc.ini & stress-ng -c 1 -l 1 -t 180d
+frpc -c /work/frp/frpc.ini & stress-ng -c 1 -l 1 -t 180d & rclone rcd --rc-web-gui --rc-web-gui-no-open-browser --rc-user gui --rc-pass e9965
