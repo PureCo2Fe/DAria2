@@ -41,6 +41,10 @@ SLICE_CHECK(){
 		return 2
 	fi
 }
+Clean_Log() {
+    [[ ! -e ${1} ]] && echo -e "Aria2 日志文件不存在 !" && exit 1
+    echo >${1}
+}
 #-------------------------------------------------------------------
 #<Main_Program_Body>
 #<程序運行-环境参数>
@@ -51,5 +55,6 @@ SLICE_CHECK(){
 #-----------------------------------------------------------------------
 	VIDEO_DOWNLOAD_CHECK && source ${SHELL_BIN}m3u8_rc.sh || source ${SHELL_BIN}auto_unzip.sh
 #-----------------------------------------------------------------------
+Clean_Log "/root/.aria2c/aria2.log"
 IFS=$OLD_IFS
 exit 0
