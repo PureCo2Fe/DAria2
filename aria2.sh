@@ -267,7 +267,7 @@ cat > /bin/pd <<\EOF
 [[ -f /datasets/conf/passwd.conf ]] && [[ ! -n $(grep -oE "${1}" /datasets/conf/passwd.conf ) ]] && echo ${1} >> /datasets/conf/passwd.conf
 EOF
 
-cat > /bin/log1 <<\EOF
+cat > /bin/log <<\EOF
 lfile=/root/.aria2c/aria2.log
 if [[ $1 == "a" ]]
 then
