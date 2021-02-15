@@ -267,6 +267,9 @@ cat > /bin/pd <<\EOF
 [[ -f /datasets/conf/passwd.conf ]] && [[ ! -n $(grep -oE "${1}" /datasets/conf/passwd.conf ) ]] && echo ${1} >> /datasets/conf/passwd.conf
 EOF
 chmod +rwx /bin/pd
+cat > /bin/log1 <<\EOF
+ps aux | grep "rclone" | grep -vE "grep" | grep -oE "rclone move [^:]+" | cut -d" " -f3
+EOF
 }
 VIEW_SSR(){
     IPV4=$(cat /work/frp/frpc.ini | grep -E "server_addr" | head -1 | cut -d" " -f3)
