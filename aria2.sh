@@ -261,15 +261,29 @@ Set_iptables() {
     chmod +x /etc/network/if-pre-up.d/iptables
 }
 PASSWD_FILE_INSERT(){
-echo "cat /root/.aria2c/aria2.log" > /bin/log2 && chmod +rwx /bin/log2
 echo "" >> /datasets/conf/passwd.conf
+
 cat > /bin/pd <<\EOF
 [[ -f /datasets/conf/passwd.conf ]] && [[ ! -n $(grep -oE "${1}" /datasets/conf/passwd.conf ) ]] && echo ${1} >> /datasets/conf/passwd.conf
 EOF
-chmod +rwx /bin/pd
+
 cat > /bin/log1 <<\EOF
-ps aux | grep "rclone" | grep -vE "grep" | grep -oE "rclone move [^:]+" | cut -d" " -f3
+lfile=/root/.aria2c/aria2.log
+if [[ $1 == "a" ]]
+then
+    echo > $lfile
+    sleep 1s
+    cat $lfile
+fi
+
+if [[ $1 == "r" ]]
+then
+    ps aux | grep "rclone" | grep -vE "grep" | grep -oE "rclone move [^:]+" | cut -d" " -f3
+fi
 EOF
+
+chmod +rwx /bin/pd
+chmod +rwx /bin/log
 }
 VIEW_SSR(){
     IPV4=$(cat /work/frp/frpc.ini | grep -E "server_addr" | head -1 | cut -d" " -f3)
