@@ -1,5 +1,3 @@
-[[ ! -d "/work" ]] && mkdir /work
-rm -rf /datasets/* && rm -rf /work/frp
 Vfrp="0.16.1" && wget -qO - https://github.com/fatedier/frp/releases/download/v${Vfrp}/frp_${Vfrp}_linux_amd64.tar.gz | tar -xzC /work && mv /work/frp_${Vfrp}_linux_amd64 /work/frp
 cat > /work/frp/frpc.ini << EOF
 [common]
