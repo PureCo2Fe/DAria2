@@ -16,6 +16,8 @@ SET_BASIC_ENV_VAR(){
 	export PATH=${PATH}:${APP_BIN}
 	export SHELL_BIN=${SHELL_BOX_PATH}/bin/sh/
 	export PASSWD_FILE=${SHELL_BOX_PATH}/conf/passwd.conf
+	export SUB_PASSWD_FILE=/kaggle/working/passwd.conf
+	#For Kaggle
 	export TEMP_PATH=${SHELL_BOX_PATH}/temp
 	export TEMP_UNZIP_PATH=${SHELL_BOX_PATH}/temp/unzip/
 	export INPUT_DIR=${TEMP_UNZIP_PATH}
@@ -23,7 +25,7 @@ SET_BASIC_ENV_VAR(){
 	INI_MKDIR ${SHELL_BIN%\/*}
 	INI_MKDIR ${TEMP_UNZIP_PATH}
 	chmod -R a+rwx ${SHELL_BOX_PATH}
-	export PASSWD=($(cat ${PASSWD_FILE}))
+	[[ -f ${SUB_PASSWD_FILE} ]] && export PASSWD=($(cat ${PASSWD_FILE}) $(cat ${SUB_PASSWD_FILE})) || export PASSWD=($(cat ${PASSWD_FILE}))
 }
 VIDEO_DOWNLOAD_CHECK(){
 	if [[ ${DOWNFILE##*.} =~ "m3u8" ]]
