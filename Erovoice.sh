@@ -83,7 +83,7 @@ write $red "正在解压压缩包"
 if [[ $(find ${TEMP_UNZIP_PATH} -type f -name "*.rar"|wc -l) > 0 ]]
 then
 	UNZIP_MULTI 5 && wait
-	for i in $(cd ${TEMP_UNZIP_PATH} |ls *.rar)
+	for i in $(find ${TEMP_UNZIP_PATH} -type f -name "*.rar")
 	do
 		read -u4
 		{
