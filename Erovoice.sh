@@ -80,7 +80,7 @@ mv ${INPUT_DIR}/* ${TEMP_UNZIP_PATH}
 #-----------------------------------------------------------------------
 #<程序运行-解压压缩包>
 write $red "正在解压压缩包"
-if [[ $(cd /content/unzip && ls *.rar |wc -l) > 0 ]]
+if [[ $(find ${TEMP_UNZIP_PATH} -type f -name "*.rar"|wc -l) > 0 ]]
 then
 	UNZIP_MULTI 5 && wait
 	for i in $(ls *.rar)
