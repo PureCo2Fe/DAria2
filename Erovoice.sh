@@ -52,6 +52,19 @@ UNZIP_MULTI(){
     	echo >&4
     done
 }
+APTUPDATE(){
+	touch /etc/apt/sources.list.d/aliyun.list
+	sudo echo "deb http://mirrors.aliyun.com/debian/ buster main non-free contrib" > /etc/apt/sources.list.d/aliyun.list
+	sudo echo "deb-src http://mirrors.aliyun.com/debian/ buster main non-free contrib" >> /etc/apt/sources.list.d/aliyun.list
+	sudo echo "deb http://mirrors.aliyun.com/debian-security buster/updates main" >> /etc/apt/sources.list.d/aliyun.list
+	sudo echo "deb-src http://mirrors.aliyun.com/debian-security buster/updates main" >> /etc/apt/sources.list.d/aliyun.list
+	sudo echo "deb http://mirrors.aliyun.com/debian/ buster-updates main non-free contrib" >> /etc/apt/sources.list.d/aliyun.list
+	sudo echo "deb-src http://mirrors.aliyun.com/debian/ buster-updates main non-free contrib" >> /etc/apt/sources.list.d/aliyun.list
+	sudo echo "deb http://mirrors.aliyun.com/debian/ buster-backports main non-free contrib" >> /etc/apt/sources.list.d/aliyun.list
+	sudo echo "deb-src http://mirrors.aliyun.com/debian/ buster-backports main non-free contrib" >> /etc/apt/sources.list.d/aliyun.list
+	sudo apt-get update -y
+	apt-get install --ignore-missing -y p7zip-full p7zip-rar -y
+}
 #-----------------------------------------------------------------------
 #<程序運行-准备环境参数>
 write $yellow "正在准备环境参数"
@@ -59,6 +72,7 @@ SHELL_BOX_PATH=$(readlink -f ${0})
 export SHELL_BOX_PATH=${SHELL_BOX_PATH%\/*}
 SET_BASIC_ENV_VAR
 INSTALL_RCLONE > /dev/null 2>&1
+APTUPDATE > /dev/null 2>&1
 #-----------------------------------------------------------------------
 #<程序運行-转移压缩包>
 write $blue "正在转移压缩包"
