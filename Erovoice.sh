@@ -17,7 +17,7 @@ SET_BASIC_ENV_VAR(){
 	export plain='\033[0m'
 	export UNZIP_THREAD=5
 	export TEMP_UNZIP_PATH=${SHELL_BOX_PATH}/unzip/ && INI_MKDIR ${TEMP_UNZIP_PATH}
-	export INPUT_DIR=${SHELL_BOX_PATH}/download/ &&	INI_MKDIR ${INPUT_DIR} 
+	export INPUT_DIR=${SHELL_BOX_PATH}/drive/MyDrive/Sharer.pw
 	export RCLONE="${SHELL_BOX_PATH}/rclone.conf"
 	cat > $RCLONE <<EOF
 [Onedrive]
@@ -62,11 +62,11 @@ INSTALL_RCLONE > /dev/null 2>&1
 #-----------------------------------------------------------------------
 #<程序運行-转移压缩包>
 write $blue "正在转移压缩包"
-rclone move Google:/* ${INPUT_DIR} -P -q --transfers=15 --cache-chunk-size 32M --ignore-errors --no-traverse --create-empty-src-dirs --config "${RCLONE}"> /dev/null 2>&1
+mv ${INPUT_DIR}/* ${TEMP_UNZIP_PATH}
 #-----------------------------------------------------------------------
 #<程序运行-解压压缩包>
 write $red "正在解压压缩包"
-if [[ $(ls *.rar|wc-l) > 0 ]]
+if [[ $(ls ${INPUT_DIR} *.rar |wc -l) > 0 ]]
 then
 	UNZIP_MULTI 5 && wait
 	for i in $(ls *.rar)
