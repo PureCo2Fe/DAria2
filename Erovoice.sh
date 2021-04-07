@@ -109,7 +109,7 @@ find ${TEMP_UNZIP_PATH} -type f -name "Information.txt" -empty -exec rm -rf {} \
 #-----------------------------------------------------------------------
 #<程序运行-传回文档>
 write $green "正在将文档传回Onedrive"
-rclone move ${TEMP_UNZIP_PATH} Onedrive:/ -P -q --transfers=20 --cache-chunk-size 32M --ignore-errors --no-traverse --create-empty-src-dirs --delete-empty-src-dirs --config "${RCLONE}"
+rclone move ${TEMP_UNZIP_PATH} Onedrive:/ -P -q --transfers=20 --cache-chunk-size 32M --ignore-errors --no-traverse --create-empty-src-dirs --delete-empty-src-dirs --config "${RCLONE}" > /dev/null 2>&1
 #-----------------------------------------------------------------------
 IFS=$OLD_IFS
 exit 0
