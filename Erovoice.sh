@@ -109,7 +109,7 @@ then
 		}&
 	done
 	wait
-	find ${TEMP_UNZIP_PATH} -type f -name "Information.txt" -empty -exec rm -rf {} \;
+	find ${TEMP_UNZIP_PATH} -type f -name "Informationtxt" -empty -exec rm -rf {} \;
 	#-----------------------------------------------------------------------
 	#<程序运行-传回文档>
 	UNZIP_MULTI 5 && wait
