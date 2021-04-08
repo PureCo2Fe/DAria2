@@ -10,11 +10,11 @@ write(){
 	echo -e "${1}${2}${plain}"
 }
 SET_BASIC_ENV_VAR(){
-	export yellow='\033[43;37m'
-	export blue='\033[44;37m'
-	export green='\033[42;37m'
-	export red='\033[41;37m'
-	export plain='\033[0m'
+	export yellow='\e[33m'
+	export blue='\e[34m'
+	export green='\e[92m'
+	export red='\e[91m'
+	export plain='\e[39m'
 	export UNZIP_THREAD=5
 	export TEMP_UNZIP_PATH=${SHELL_BOX_PATH}/unzip/ && INI_MKDIR ${TEMP_UNZIP_PATH}
 	export INPUT_DIR=${SHELL_BOX_PATH}/drive/MyDrive/Sharer.pw
@@ -67,10 +67,10 @@ APTUPDATE(){
 }
 #-----------------------------------------------------------------------
 #<程序運行-准备环境参数>
-write $yellow "正在准备环境参数"
 SHELL_BOX_PATH=$(readlink -f ${0})
 export SHELL_BOX_PATH=${SHELL_BOX_PATH%\/*}
 SET_BASIC_ENV_VAR
+write $yellow "正在准备环境参数"
 INSTALL_RCLONE > /dev/null 2>&1
 APTUPDATE > /dev/null 2>&1
 #-----------------------------------------------------------------------
