@@ -113,7 +113,7 @@ then
 	#-----------------------------------------------------------------------
 	#<程序运行-传回文档>
 	UNZIP_MULTI 5 && wait
-	for i in $(find ${TEMP_UNZIP_PATH} -type d -maxdepth 1)
+	for i in $(find ${TEMP_UNZIP_PATH} -maxdepth 1 -type d | sed "1d")
 	do
 		read -u4
 		{
