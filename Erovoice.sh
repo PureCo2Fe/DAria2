@@ -92,7 +92,7 @@ then
 		read -u4
 		{
 			write $red "正在解压压缩包【${i##*\/}】"
-			7z x -y -r -bsp1 -bso0 -bse0 -aot -o${TEMP_UNZIP_PATH} ${i}
+			7z x -y -r -bsp0 -bso0 -bse0 -aot -o${TEMP_UNZIP_PATH} ${i}
 			rm -rf ${i}
 			echo >&4
 		}&
