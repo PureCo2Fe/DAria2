@@ -76,10 +76,14 @@ APTUPDATE > /dev/null 2>&1
 #-----------------------------------------------------------------------
 #<程序運行-转移压缩包>
 write $blue "正在转移压缩包"
-mv ${INPUT_DIR}/* ${TEMP_UNZIP_PATH}
+for i in $(ls ${INPUT_DIR})
+do
+	write $blue "正在移动【${i}】"
+	mv ${INPUT_DIR}/${i} ${TEMP_UNZIP_PATH} 
+	write $green "移动压缩包【${i}】完成"
+done
 #-----------------------------------------------------------------------
 #<程序运行-解压压缩包>
-write $red "正在解压压缩包"
 if [[ $(find ${TEMP_UNZIP_PATH} -type f -name "*.rar"|wc -l) > 0 ]]
 then
 	UNZIP_MULTI 5 && wait
@@ -87,29 +91,41 @@ then
 	do
 		read -u4
 		{
+			write $red "正在解压压缩包【${i##*\/}】"
 			7z x -y -r -bsp1 -bso0 -bse0 -aot -o${TEMP_UNZIP_PATH} ${i}
 			rm -rf ${i}
 			echo >&4
 		}&
 	done
 	wait && exec 4>&-
+	#-----------------------------------------------------------------------
+	#<程序运行-简化压缩包>
+	write $yellow "正在简化Erovoice压缩包结构"
+	for i in $(find ${TEMP_UNZIP_PATH} -maxdepth 2 -type d | grep -E "RJ[[:digit:]]+-EroVoice.us")
+	do
+		{
+			mv ${i}/* ${i%\/*}
+			rm -rf ${i}
+		}&
+	done
+	wait
+	find ${TEMP_UNZIP_PATH} -type f -name "Information.txt" -empty -exec rm -rf {} \;
+	#-----------------------------------------------------------------------
+	#<程序运行-传回文档>
+	UNZIP_MULTI 5 && wait
+	for i in $(find ${TEMP_UNZIP_PATH} -type d -maxdepth 1)
+	do
+		read -u4
+		{
+			write $red "正在传回【${i##*\/}】"
+			rclone move ${i} Onedrive:/${i##*\/} -P -q --transfers=20 --cache-chunk-size 32M --ignore-errors --no-traverse --create-empty-src-dirs --delete-empty-src-dirs --config "${RCLONE}" > /dev/null 2>&1
+			write $green "完成传回【${i##*\/}】"
+			echo >&4
+		}&
+	done
+	wait && exec 4>&-
+	#-----------------------------------------------------------------------
 fi
-#-----------------------------------------------------------------------
-#<程序运行-简化压缩包>
-write $yellow "正在简化Erovoice压缩包结构"
-for i in $(find ${TEMP_UNZIP_PATH} -maxdepth 2 -type d | grep -E "RJ[[:digit:]]+-Erovoice.us")
-do
-	{
-		mv ${i}/* ${i%\/*}
-		rm -rf ${i}
-	}&
-done
-wait
-find ${TEMP_UNZIP_PATH} -type f -name "Information.txt" -empty -exec rm -rf {} \;
-#-----------------------------------------------------------------------
-#<程序运行-传回文档>
-write $green "正在将文档传回Onedrive"
-rclone move ${TEMP_UNZIP_PATH} Onedrive:/ -P -q --transfers=20 --cache-chunk-size 32M --ignore-errors --no-traverse --create-empty-src-dirs --delete-empty-src-dirs --config "${RCLONE}" > /dev/null 2>&1
-#-----------------------------------------------------------------------
+write $green "已完成传输"
 IFS=$OLD_IFS
 exit 0
