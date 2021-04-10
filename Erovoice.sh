@@ -125,7 +125,9 @@ then
 	done
 	wait && exec 4>&-
 	#-----------------------------------------------------------------------
-fi
 write $green "已完成传输"
+else
+write $red "並無找到相關壓縮包"
+fi
 IFS=$OLD_IFS
 exit 0
