@@ -115,7 +115,8 @@ then
 		read -u4
 		{
 			write $red "正在传回【${i##*\/}】"
-			rclone move ${i} Onedrive:/${i##*\/} -P -q --transfers=20 --cache-chunk-size 32M --ignore-errors --no-traverse --create-empty-src-dirs --delete-empty-src-dirs --config "${RCLONE}" > /dev/null 2>&1
+			rclone copy ${i} Onedrive:/${i##*\/} -q --transfers=20 --cache-chunk-size 32M --ignore-errors --no-traverse --create-empty-src-dirs --delete-empty-src-dirs --config "${RCLONE}" > /dev/null 2>&1
+			mv ${i} /content/${i##*\/}
 			write $green "完成传回【${i##*\/}】"
 			echo >&4
 		}&
