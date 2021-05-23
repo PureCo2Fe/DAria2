@@ -116,7 +116,7 @@ then
 		{
 			write $red "正在传回【${i##*\/}】"
 			rclone copy ${i} Onedrive:/${i##*\/} -q --transfers=20 --cache-chunk-size 32M --ignore-errors --no-traverse --create-empty-src-dirs --delete-empty-src-dirs --config "${RCLONE}" > /dev/null 2>&1
-			mv ${i} /content/${i##*\/}
+			mv ${i} /content/drive/MyDrive/${i##*\/}
 			write $green "完成传回【${i##*\/}】"
 			echo >&4
 		}&
