@@ -83,7 +83,7 @@ function UNZIP_FILE(){
 function FILE_EXIST(){
 #The Function return <1> whenever the INPUT_DIR has the file to be decompressed
 #The Function return <0> whenever the INPUT_DIR doesn't have the file to be decompressed
-    [[ $(ls ${TEMP_UNZIP_PATH}) == "" ]] && echo 1 || echo 0
+    [[ $(ls ${TEMP_UNZIP_PATH}) == "" ]] && echo 0 || echo 1
 }
 
 function INI_MKDIR(){
