@@ -133,5 +133,6 @@ function TRANSFER_COMPRESSED_FILE(){
     done
     wait && exec 4>&-
 }
+main
 IFS=$OLD_IFS
 exit 0
