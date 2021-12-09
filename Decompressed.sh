@@ -60,6 +60,7 @@ function TRANSFER_DECOMPRESSED_FILE(){
 function init(){
     write $yellow "正在准备环境参数"
     APT_UPDATE > /dev/null 2>&1
+    INI_MKDIR ${TEMP_UNZIP_PATH}
     >& unzip_file_list.tmp
 #The <unzip_file_list.tmp> is for recording the src. file name and removing them after the task is completed 
 }
