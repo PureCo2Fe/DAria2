@@ -44,12 +44,12 @@ function TRANSFER_DECOMPRESSED_FILE(){
     REMOVE_SRC_FILE
     INI_MKDIR ${OUTPUT_PATH}
     UNZIP_MULTI 5 && wait
-    for i in $(find ${TEMP_UNZIP_PATH} -maxdepth 1 | sed "1d")
+    for i in $(ls ${TEMP_UNZIP_PATH})
     do
         read -u4
         {
             write $red "正在传回【${i##*\/}】"
-            mv ${i} ${OUTPUT_PATH}
+            mv ${TEMP_UNZIP_PATH}${i} ${OUTPUT_PATH}
             write $green "完成传回【${i##*\/}】"
             echo >&4
         }&
@@ -67,12 +67,12 @@ function init(){
 
 function UNZIP_FILE(){
     UNZIP_MULTI 5 && wait
-	for i in $(find ${TEMP_UNZIP_PATH} | grep -iE "*.zip(.)+|*.7z|*.rar(.)+" | grep -vE "\.part[2-9]|[0-9].\.rar$" | sed '/^$/d' )
+	for i in $(ls ${TEMP_UNZIP_PATH} | grep -iE "*.zip(.)+|*.7z|*.rar(.)+" | grep -vE "\.part[2-9]|[0-9].\.rar$" | sed '/^$/d' )
 	do
 		read -u4
 		{
 			write $red "正在解压压缩包【${i##*\/}】"
-			7z x -y -r -bsp0 -bso0 -bse0 -aot -o${TEMP_UNZIP_PATH} ${i}
+			7z x -y -r -bsp0 -bso0 -bse0 -aot -o${TEMP_UNZIP_PATH} ${TEMP_UNZIP_PATH}${i}
 			rm -rf ${i}
 			echo >&4
 		}&
