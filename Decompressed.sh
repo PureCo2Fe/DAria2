@@ -34,7 +34,7 @@ function CLEAN_TEMP(){
 }
 
 function REMOVE_SRC_FILE(){
-    for i in $(cat unzip_file_list.tmp)
+    for i in $(cat unzip_file_list.tmp | sed '/^$/d')
     do
         rm -rf ${TEMP_UNZIP_PATH}${i}
     done
@@ -67,7 +67,7 @@ function init(){
 
 function UNZIP_FILE(){
     UNZIP_MULTI 5 && wait
-	for i in $(find ${TEMP_UNZIP_PATH} | grep -iE "*.zip(.)+|*.7z|*.rar(.)+" | grep -vE "\.part[2-9]|[0-9].\.rar$" )
+	for i in $(find ${TEMP_UNZIP_PATH} | grep -iE "*.zip(.)+|*.7z|*.rar(.)+" | grep -vE "\.part[2-9]|[0-9].\.rar$" | sed '/^$/d' )
 	do
 		read -u4
 		{
